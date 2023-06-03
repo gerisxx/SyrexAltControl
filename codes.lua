@@ -19,6 +19,9 @@ local Codes = {
   "Stars",
   "STARS",
   "DHUpdate",
+  "SUMMER2023!",
+  "dahoodtrades",
+  "TRADEME!",
 }
 
 return Codes
