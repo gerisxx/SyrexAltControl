@@ -55,7 +55,7 @@ local HostName = Players:GetNameFromUserIdAsync(tonumber(Host))
 local FlaggedRemotes = { "TeleportDetect", "CHECKER_1", "CHECKER_2", "OneMoreTime", "VirusCough", "BreathingHAMON", "TimerMoney" }
 
 -- // Libarys (not rlly just couldnt be fucked thinking of a name)
-local Locations = loadstring(game:HttpGet("https://raw.githubusercontent.com/socialsuicide/roblox-scripts/main/DaHood/spooky-source/resources/setup.lua"))()
+local Locations = loadstring(game:HttpGet("https://raw.githubusercontent.com/gerisxx/SyrexAltControl/main/setup.lua"))()
 local Codes = loadstring(game:HttpGet("https://raw.githubusercontent.com/socialsuicide/roblox-scripts/main/DaHood/spooky-source/resources/codes.lua"))()
 
 -- // Awaiting until game is fully loaded
