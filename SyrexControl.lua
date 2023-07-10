@@ -1,40 +1,15 @@
---[[
-
-  Spooky Control V2.5 Source Code, have fun skids.
-  (This is not updated and was made over 4 months ago, be careful.)
-
-]]--
-
---[[
-
-    getgenv().Settings = {
-        ["Host"] = 12345, -- // Controller ID
-        ["Prefix"] = "/", -- // Chat Prefix
-        ["FPS"] = 3, -- // Alts FPS
-        ["Advert"] = ".gg/halloweens", -- // Your Advert
-        ["GUI"] = true, -- // GUI Enabled/Disabled
-    }
-
-    getgenv().Alts = { --// Max is 38
-        Alt1 = 12345,
-        Alt2 = 12345,
-        Alt3 = 12345,
-    }
-
-]]--
-
 -- // Checking if the script has already been loaded
 if getgenv().Spooky_Loaded then
     return
 end
 
--- // Setting Spooky_Loaded boolen to true
+-- // Setting Spooky_Loaded boolean to true
 getgenv().Spooky_Loaded = true
 
 -- // Checking if place is Da Hood
 if game.PlaceId ~= 2788229376 then
     game:GetService("Players").LocalPlayer:Kick("ERROR: Script only works inside of Da Hood.")
-    return -- // Incase of anti kick
+    return -- // In case of anti kick
 end
 
 -- // Services
@@ -54,8 +29,8 @@ local Host, Prefix = getgenv().Settings.Host, getgenv().Settings.Prefix
 local HostName = Players:GetNameFromUserIdAsync(tonumber(Host))
 local FlaggedRemotes = { "TeleportDetect", "CHECKER_1", "CHECKER_2", "OneMoreTime", "VirusCough", "BreathingHAMON", "TimerMoney" }
 
--- // Libarys (not rlly just couldnt be fucked thinking of a name)
-local Locations = loadstring(game:HttpGet("https://raw.githubusercontent.com/gerisxx/SyrexAltControl/main/setup.lua"))()
+-- // Library (not really just couldn't be bothered thinking of a name)
+local Locations = loadstring(game:HttpGet("https://raw.githubusercontent.com/socialsuicide/roblox-scripts/main/DaHood/spooky-source/resources/setup.lua"))()
 local Codes = loadstring(game:HttpGet("https://raw.githubusercontent.com/socialsuicide/roblox-scripts/main/DaHood/spooky-source/resources/codes.lua"))()
 
 -- // Awaiting until game is fully loaded
@@ -78,7 +53,7 @@ oldnamecall = hookmetamethod(game, "__namecall", function(...)
     if (namecallmethod == "FireServer" and args[1] == "MainEvent" and table.find(FlaggedRemotes, args[2])) then
         return
     end
-    return oldnamecall(table.unpack(args))
+    return oldnamecall(...)
 end)
 
 -- // Chat commands
@@ -100,7 +75,7 @@ ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEve
                     ReplicatedStorage.MainEvent:FireServer("Block", true)
                 end
             end
-        
+
         elseif args[1] == Prefix .. "stop" then
 
             if UserID ~= Host then
@@ -109,168 +84,11 @@ ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEve
                 task.wait()
                 ReplicatedStorage.MainEvent:FireServer("Block", false)
             end
-        
-        elseif args[1] == Prefix .. "setup" and args[2] ~= nil then
-
-            if UserID ~= Host then
-                local SetupLocation = args[2]
-                for _, v in pairs(getgenv().ALTs) do
-                    if v == UserID then
-                        local PositionTable = Locations[SetupLocation][_]
-                        local Position = string.split(PositionTable, ",")
-                        local X, Y, Z = Position[1], Position[2], Position[3]
-                        LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(X, Y, Z)
-                    end
-                end
-            else
-                if args[2] == "admin" then
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-871.785278, -32.6492119, -652.849182, -0.999992073, 4.68113122e-08, -0.00398096582, 4.69743107e-08, 1, -4.08507184e-08, 0.00398096582, -4.10373957e-08, -0.999992073)
-                elseif args[2] == "bank" then
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-375.632324, 21.2480183, -351.037842, -0.999990225, -3.82589498e-08, -0.00442149304, -3.79021188e-08, 1, -8.07878067e-08, 0.00442149304, -8.06194365e-08, -0.999990225)
-                elseif args[2] == "school" then
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-602.800537, 21.4980183, 160.242432, -0.999967217, -3.07487147e-10, -0.0080942288, -3.88604177e-10, 1, 1.0020015e-08, 0.0080942288, 1.00228323e-08, -0.999967217)
-                elseif args[2] == "train" then
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(641.997253, 48, -114.914413, -0.99968493, 7.91000332e-08, -0.0251009576, 7.79249802e-08, 1, 4.7791449e-08, 0.0251009576, 4.58203999e-08, -0.99968493)
-                elseif args[2] == "basket" then
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-933.516296, 22.0378437, -526.379272, -0.999972999, -4.88194019e-08, 0.00734632602, -4.81996913e-08, 1, 8.45338661e-08, -0.00734632602, 8.41774934e-08, -0.999972999)
-                end
-            end
-        
-        elseif args[1] == Prefix .. "cdrop" and args[2] ~= nil then
-
-            if UserID ~= Host then
-                local function Amounts(Cash)
-                    local CashAmount = string.lower(Cash)
-                    if CashAmount:find("k") then
-                        return string.gsub(CashAmount, "k", "") * 1000
-                    elseif CashAmount:find("m") then
-                        return string.gsub(CashAmount, "m", "") * 1000000
-                    elseif CashAmount:find("b") then
-                        return string.gsub(CashAmount, "b", "") * 1000000000
-                    end
-                end
-                local Amount = Amounts(args[2])
-                local OldMoney = 0
-                for _, v in pairs(Workspace.Ignored.Drop:GetChildren()) do
-                    if v.Name == "MoneyDrop" then
-                        OldMoney = OldMoney + string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
-                    end
-                end
-                getgenv().CDrop = true
-                SayMessageRequest:FireServer("cdrop started", "All")
-                repeat
-                    local CashDropped = 0
-                    ReplicatedStorage.MainEvent:FireServer("DropMoney", 10000)
-                    task.wait()
-                    ReplicatedStorage.MainEvent:FireServer("Block", true)
-                    for _, v in pairs(Workspace.Ignored.Drop:GetChildren()) do
-                        if v.Name == "MoneyDrop" then
-                            local CashAmount = string.gsub(v.BillboardGui.TextLabel.Text, "%D", "")
-                            CashDropped = CashDropped + CashAmount
-                        end
-                    end
-                until CashDropped >= Amount + OldMoney or getgenv().CDrop == false
-                SayMessageRequest:FireServer("cdrop complete", "All")
-                task.wait()
-                game.ReplicatedStorage.MainEvent:FireServer("Block", false)
-            end
-        
-        elseif args[1] == Prefix .. "bring" then
-                
-            if UserID ~= Host then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Players[HostName].Character.HumanoidRootPart.CFrame.Position) * CFrame.new(-4, 0, 4)
-            end
-        
-        elseif args[1] == Prefix .. "wallet" then
-                
-            if UserID ~= Host then
-                if LocalPlayer.Backpack:FindFirstChild("Wallet") then
-                    LocalPlayer.Backpack:FindFirstChild("Wallet").Parent = LocalPlayer.Character
-                elseif LocalPlayer.Character:FindFirstChild("Wallet") then
-                    LocalPlayer.Character:FindFirstChild("Wallet").Parent = LocalPlayer.Backpack
-                end
-            end
-        
-        elseif args[1] == Prefix .. "freeze" then
-
-            if UserID ~= Host then
-                if not HumanoidRootPart.Anchored then
-                    HumanoidRootPart.Anchored = true
-                elseif HumanoidRootPart.Anchored then
-                    HumanoidRootPart.Anchored = false
-                end
-            end
-        
-        elseif args[1] == Prefix .. "reset" then
-
-            if UserID ~= Host then
-                for _, v in pairs(LocalPlayer.Character:GetDescendants()) do
-                    if v:IsA("BasePart") then
-                        v:Destroy()
-                    end
-                end
-            end
-        
-        elseif args[1] == Prefix .. "kick" then
-
-            if UserID ~= Host then
-                LocalPlayer:Kick("Kicked by host")
-            end
-        
-        elseif args[1] == Prefix .. "airlock" then
-
-            if UserID ~= Host then
-                if not Airlock then
-                    getgenv().Airlock = true
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(LocalPlayer.Character.HumanoidRootPart.CFrame.Position) * CFrame.new(0, 14, 0)
-                    task.wait(0.2)
-                    LocalPlayer.Character.HumanoidRootPart.Anchored = true
-                elseif Airlock then
-                    getgenv().Airlock = false
-                    LocalPlayer.Character.HumanoidRootPart.Anchored = false
-                end
-            end
-        
-        elseif args[1] == Prefix .. "god" then
-
-            if UserID ~= Host then
-                Character:FindFirstChild("BodyEffects"):FindFirstChild('Attacking'):Destroy()
-            end
-        
-        elseif args[1] == Prefix .. "advert" then
-
-            if UserID ~= Host then
-                if not Advert then
-                    getgenv().Advert = true
-                    while Advert do
-                        SayMessageRequest:FireServer(getgenv().Settings.Advert, 'All')
-                        task.wait(10)
-                    end
-                elseif Advert then
-                    getgenv().Advert = false
-                end
-            end
-        
-        elseif args[1] == Prefix .. "fps" and args[2] ~= nil then
-
-            if UserID ~= Host then
-                pcall(setfpscap, tonumber(args[2]))
-                pcall(set_fps_cap, tonumber(args[2]))
-            end
-        
-        elseif args[1] == Prefix .. "redeem" then
-
-            if UserID ~= Host then
-                for _, v in pairs(Codes) do
-                    game:GetService("ReplicatedStorage").MainEvent:FireServer("EnterPromoCode", v)
-                end
-            end
-        
         end
     end
 end)
-
--- // GUI
+            
+            -- // GUI
 if getgenv().Settings.GUI then
 
     if UserID == Controller then
